@@ -1,38 +1,265 @@
-.App {
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #cdb4db;
+  color: #f8f9fa;
+  overflow-x: hidden;
+
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffafcc;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   text-align: center;
+  animation: fadeInContainer 1s ease-out;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  font-size: 2.8em;
+  color: #a37184;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  animation: fadeIn 1s ease-out 0.5s;
+  animation-fill-mode: both;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+span{
+  color: #fff;
+  animation: fadeIn 1s ease-out 0.5s;
+  animation-fill-mode: both;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(4, 1.3fr); /* Standardowa siatka dla szerokich ekranów */
+  gap: 20px;
+}
+
+.day {
+  background-color: #a2d2ff;
+  border-radius: 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  text-align: center;
+  height: 140px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  position: relative;
+  animation: slideUp 0.8s ease-out;
+  animation-delay: calc(0.05s * var(--i));
+  animation-fill-mode: both;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.App-link {
-  color: #61dafb;
+.day:hover {
+  transform: scale(1.05);
+  background-color: #bde0fe;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.today {
+  background-color: #ffb86c;
+  color: #1e1e2e;
+  font-weight: bold;
+  position: relative;
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+  -webkit-box-shadow: 0px 0px 76px 18px rgba(227, 255, 26, 1);
+  -moz-box-shadow: 0px 0px 76px 18px rgba(227, 255, 26, 1);
+  box-shadow: 0px 0px 76px 18px rgba(227, 255, 26, 1);
+}
+
+.date {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #282a36;
+}
+
+.holiday {
+  margin-top: 10px;
+  font-size: 1em;
+  color: #f8f9fa;
+}
+
+.compliment {
+  margin-top: 10px;
+  font-size: 0.95em;
+  font-style: italic;
+  color: #f8f9fa;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 10px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  width: max-content;
+  max-width: 90%;
+}
+
+.today .compliment {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 1200px) {
+  .calendar {
+    grid-template-columns: repeat(4, 1fr); /* Zmniejszenie liczby kolumn na większych tabletach */
   }
-  to {
-    transform: rotate(360deg);
+}
+
+@media (max-width: 992px) {
+  body{
+    display: block;
   }
+}
+
+@media (max-width: 576px) {
+  .calendar {
+    grid-template-columns: repeat(2, 1fr); /* Dwie kolumny na małych ekranach, jak smartfony */
+    gap: 10px; /* Mniejszy odstęp między kafelkami */
+  }
+
+  h1 {
+    font-size: 1.8em; /* Zmniejszenie rozmiaru nagłówka na małych ekranach */
+  }
+
+  .day {
+    height: 120px; /* Zmniejszenie wysokości kafelków na telefonach */
+  }
+
+  .date {
+    font-size: 1.5em; /* Zmniejszenie wielkości daty na kafelkach */
+  }
+
+  .holiday {
+    font-size: 0.9em; /* Zmniejszenie rozmiaru tekstu święta */
+  }
+
+  .compliment {
+    font-size: 0.85em; /* Zmniejszenie komplementu, aby lepiej pasował do małych ekranów */
+    padding: 4px 8px; /* Zmniejszenie paddingu komplementu */
+  }
+}
+
+@media (max-width: 400px) {
+  .calendar {
+    grid-template-columns: repeat(1, 1fr); /* Pojedyncza kolumna na najmniejszych urządzeniach */
+    gap: 8px; /* Dalsze zmniejszenie odstępu między kafelkami */
+  }
+
+  .day {
+    height: 100px; /* Jeszcze mniejsza wysokość kafelków */
+  }
+
+  .date {
+    font-size: 1.3em; /* Dalsze zmniejszenie daty */
+  }
+
+  .holiday {
+    font-size: 0.85em; /* Dalsze zmniejszenie tekstu święta */
+  }
+}
+
+/* Animacje */
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInContainer {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Styl kontenera na kartę oraz efekt flipu */
+.day {
+  perspective: 1000px;
+}
+
+.day .flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.day.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.flip-card-front {
+  background-color: #a2d2ff;
+}
+
+.flip-card-back {
+  background-color: #ffb86c;
+  color: #1e1e2e;
+  transform: rotateY(180deg);
+}
+
+/* Dostosowanie komplementu, aby wyglądał dobrze po obrocie */
+.flip-card-back .compliment {
+  visibility: visible;
+  opacity: 1;
 }
